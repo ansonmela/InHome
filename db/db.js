@@ -1,0 +1,24 @@
+const customers = [
+    {
+      "id": 1,
+      "name": "Jason Brown"
+    },
+    {
+      "id": 2,
+      "name": "Sarah Williams"
+    },
+    {
+      "id": 3,
+      "name": "Frank Smith"
+    },
+    {
+      "id": 4,
+      "name": "Anthony Jones"
+    },
+    {
+      "id": 5,
+      "name": "Maria Miller"
+    },
+  ];
+
+  export default customers;
