@@ -1,12 +1,11 @@
-const { getCustomers } = require('../services/customerService.js');
+const { getCustomers, createCustomerService } = require('../services/customerService.js');
 
-const getCustomersController = async (req, res, next) => {
+const getAllCustomers = async (req, res, next) => {
     let resData;
     
     try {
         resData = await getCustomers();
         res.send(JSON.parse(resData));
-        next();
     } catch (e) {
         console.log(e.message);
     }
@@ -15,6 +14,35 @@ const getCustomersController = async (req, res, next) => {
 }
 
 
+const createCustomer = async(req, res, next) => {
+    console.log("REQ BODY", req.body);
+    let lastElement;
+
+    try {
+        let resFromFile = await getCustomers();
+        lastElement = JSON.parse(resFromFile).pop();
+    } catch (e) {
+        console.log(e.message);
+    }
+
+    let newID = lastElement.id + 1;
+
+    let newCustomerName = req.body.name;
+    console.log(newCustomerName);
+
+    try {
+        await createCustomerService(newID, newCustomerName);
+    } catch (e) {
+        console.log("controller");
+        console.log(e.message);
+    }
+
+    res.sendStatus(201);
+    
+}
+
+
 module.exports = {
-    getCustomersController
+    getAllCustomers,
+    createCustomer
 }
