@@ -1,9 +1,12 @@
 const { fs } = require("file-system");
 
-const getCustomerFromDB = () => {
-    const filePath = 'api/data/customers.json';
+const customersFilePath = 'api/data/customers.json';
+const ordersFilePath = 'api/data/orders.json';
+const orderLinesFilePath = 'api/data/order_lines.json';
 
-    const dataFromFile = fs.readFileSync(filePath, 'utf-8', (err, data) => {
+
+const getCustomerFromDB = () => {
+    const dataFromFile = fs.readFileSync(customersFilePath, 'utf-8', (err, data) => {
         if (err) {
             console.log(err);
         }
@@ -16,9 +19,8 @@ const getCustomerFromDB = () => {
 
 const createCustomerInDB = (customerJSON) => {
     customerJSON = JSON.parse(customerJSON);
-    const dataPath = 'api/data/customers.json';
 
-    let dataFromFile = fs.readFileSync(dataPath, function(err, data) {
+    let dataFromFile = fs.readFileSync(customersFilePath, function(err, data) {
         if (err) console.log(err);
 
         let jsonFromFile = JSON.parse(data);
@@ -32,9 +34,62 @@ const createCustomerInDB = (customerJSON) => {
     fs.writeFileSync(dataPath, JSON.stringify(json));
 
     return true;
-} 
+}
+
+const updateCustomerInDB = (id, customerName) => {
+    id = parseInt(id);
+
+    let dataFromFile = fs.readFileSync(customersFilePath, function(err, data) {
+        if (err) console.log(err);
+
+        return data;
+    })
+
+    dataFromFile = JSON.parse(dataFromFile);
+
+    for (const customer of dataFromFile) {
+        if (customer.id === id) {
+            customer.name = customerName;
+            break;
+        }
+    }
+
+    fs.writeFileSync(dataPath, JSON.stringify(dataFromFile));
+}
+
+const createCustomerOrderInDB = (customerID, itemID, quantity) => {
+    let ordersFromFile = fs.readFileSync(ordersFilePath, function(err, data) {
+        if (err) console.log(err);
+
+        return data;
+    });
+
+    ordersFromFile = JSON.parse(ordersFromFile);
+
+    let lastElement = ordersFromFile[ordersFromFile.length - 1];
+    let nextOrderID = lastElement.id + 1;
+
+    ordersFromFile.push({id: nextOrderID, user_id: customerID});
+
+    fs.writeFileSync(ordersFilePath, JSON.stringify(ordersFromFile));
+
+
+    let orderLinesFromFile = fs.readFileSync(orderLinesFilePath, function(err, data) {
+        if (err) console.log(err);
+
+        return data;
+    });
+
+    orderLinesFromFile = JSON.parse(orderLinesFromFile);
+
+    orderLinesFromFile.push({order_id: nextOrderID, item_id: itemID, qty: quantity});
+
+    fs.writeFileSync(orderLinesFilePath, JSON.stringify(orderLinesFromFile));
+}
 
 module.exports = {
     getCustomerFromDB,
-    createCustomerInDB
+    createCustomerInDB,
+    updateCustomerInDB,
+    createCustomerOrderInDB
 }

@@ -1,4 +1,4 @@
-const { getCustomerFromDB, createCustomerInDB } = require('../db/customerDB');
+const { getCustomerFromDB, createCustomerInDB, updateCustomerInDB, createCustomerOrderInDB } = require('../db/customerDB');
 
 const getCustomers = async () => {
     try {
@@ -9,8 +9,6 @@ const getCustomers = async () => {
 }
 
 const createCustomerService = async (id, customerName) => {
-    console.log("YOOOO", customerName)
-
     let newCustomerJSON = {
         id: id,
         name: customerName
@@ -21,13 +19,34 @@ const createCustomerService = async (id, customerName) => {
     try {
         return createCustomerInDB(newCustomerJSON);
     } catch (e) {
-        console.log("service");
         throw new Error(e.message);
     }
 }
 
 
+const updateCustomerService = async (id, customerName) => {
+    try {
+        return updateCustomerInDB(id, customerName);
+    } catch (e) {
+        throw new Error(e.message);
+    }
+}
+
+
+const createCustomerOrderService = async (customerID, itemID, quantity) => {
+
+    try {
+        return createCustomerOrderInDB(customerID, itemID, quantity);
+    } catch (e) {
+        console.log(e.message);
+    }
+
+}
+
+
 module.exports = {
     getCustomers,
-    createCustomerService
+    createCustomerService,
+    updateCustomerService,
+    createCustomerOrderService
 }
