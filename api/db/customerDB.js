@@ -87,9 +87,33 @@ const createCustomerOrderInDB = (customerID, itemID, quantity) => {
     fs.writeFileSync(orderLinesFilePath, JSON.stringify(orderLinesFromFile));
 }
 
+const customerOrderUpdateInDB = (orderID, orderQuantity, itemID) => {
+    orderID = parseInt(orderID);
+    itemID = parseInt(itemID);
+
+    let orderLinesFromFile = fs.readFileSync(orderLinesFilePath, function(err, data) {
+        if (err) console.log(err);
+        return data;
+    });
+
+    orderLinesFromFile = JSON.parse(orderLinesFromFile);
+
+    for (var i = 0; i < orderLinesFromFile.length; i++) {
+        if (orderLinesFromFile[i].order_id === orderID && orderLinesFromFile[i].item_id === itemID) {
+            orderLinesFromFile[i].qty = orderQuantity;
+            break;
+        }
+    }
+
+    fs.writeFileSync(orderLinesFilePath, JSON.stringify(orderLinesFromFile));
+}
+
+
+
 module.exports = {
     getCustomerFromDB,
     createCustomerInDB,
     updateCustomerInDB,
-    createCustomerOrderInDB
+    createCustomerOrderInDB,
+    customerOrderUpdateInDB
 }

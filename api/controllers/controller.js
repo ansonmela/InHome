@@ -1,4 +1,9 @@
-const { getCustomers, createCustomerService, updateCustomerService, createCustomerOrderService} = require('../services/customerService.js');
+const { getCustomers, 
+        createCustomerService, 
+        updateCustomerService, 
+        createCustomerOrderService, 
+        customerOrderUpdateService 
+    } = require('../services/customerService.js');
 
 const getAllCustomers = async (req, res, next) => {
     let resData;
@@ -40,7 +45,7 @@ const createCustomer = async(req, res, next) => {
 }
 
 const updateCustomer = async (req, res, next) => {
-    const customerID = req.params.id;
+    const customerID = req.params.customer_id;
     const customerNameToUpdate = req.body.name;
 
     try {
@@ -57,11 +62,6 @@ const createCustomerOrder = async (req, res, next) => {
     const itemID = req.body.itemID;
     const quantity = req.body.quantity;
 
-    console.log("customeriD", customerID);
-    console.log("itemID", itemID);
-    console.log("quantity", quantity);
-    
-
     try {
         await createCustomerOrderService(customerID, itemID, quantity);
     } catch (e) {
@@ -71,11 +71,28 @@ const createCustomerOrder = async (req, res, next) => {
     res.sendStatus(201);
 }
 
+const customerOrderUpdate = async (req, res, next) => {
+    const orderID = req.params.order_ID;
+    const orderQuantity = req.body.order_quantity;
+    const itemID = req.params.item_ID;
+
+    if (orderQuantity === 0) {
+        res.send({ error: "Updated order quantity cannot be 0"});
+    } else {
+        try {
+            await customerOrderUpdateService(orderID, orderQuantity, itemID);
+        } catch (e) {
+            console.log(e.message);
+        }
+        res.sendStatus(204);
+    }
+}
 
 
 module.exports = {
     getAllCustomers,
     createCustomer,
     updateCustomer,
-    createCustomerOrder
+    createCustomerOrder,
+    customerOrderUpdate
 }

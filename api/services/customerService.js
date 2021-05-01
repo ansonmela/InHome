@@ -1,4 +1,9 @@
-const { getCustomerFromDB, createCustomerInDB, updateCustomerInDB, createCustomerOrderInDB } = require('../db/customerDB');
+const { getCustomerFromDB, 
+        createCustomerInDB, 
+        updateCustomerInDB, 
+        createCustomerOrderInDB, 
+        customerOrderUpdateInDB 
+    } = require('../db/customerDB');
 
 const getCustomers = async () => {
     try {
@@ -43,10 +48,19 @@ const createCustomerOrderService = async (customerID, itemID, quantity) => {
 
 }
 
+const customerOrderUpdateService = async (orderID, orderQuantity, itemID) => {
+    try {
+        return customerOrderUpdateInDB(orderID, orderQuantity, itemID);
+    } catch (e) {
+        console.log(e.message);
+    }
+}
+
 
 module.exports = {
     getCustomers,
     createCustomerService,
     updateCustomerService,
-    createCustomerOrderService
+    createCustomerOrderService,
+    customerOrderUpdateService
 }
