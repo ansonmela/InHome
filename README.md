@@ -10,10 +10,10 @@
 6. Once the server is up, open up Postman or any other API client and make requests to each of the endpoints.
 7. The endpoints are: 
 
-GET: /customer/get 
+* GET: /customer/get 
 <br/>
 <br/>
-POST: /customer/create 
+* POST: /customer/create 
 <br/>
 <br/>
 ```
@@ -21,7 +21,7 @@ ReqBody: { "name": "Test Name" }
 ``` 
 <br/>
 <br/>
-PUT: /customer/update/:customer_id 
+* PUT: /customer/update/:customer_id 
 <br/>
 <br/>
 
@@ -30,7 +30,7 @@ ReqBody: { "name": "Updated Name" }
 ``` 
 
 <br/>
-POST: /customer/order/create 
+* POST: /customer/order/create 
 <br/>
 
 ```
@@ -41,7 +41,7 @@ ReqBody: {
 } 
 ```
 
-PUT: /customer/order/update/item/:order_id/:item_id 
+* PUT: /customer/order/update/item/:order_id/:item_id 
 <br/>
 
 ```
@@ -51,9 +51,9 @@ ReqBody: {
 ```
 <br/>
 
-DELETE: /customer/order/delete/item/order_id/item_id 
+* DELETE: /customer/order/delete/item/order_id/item_id 
 <br/>
 <br/>
-GET: /recommendation 
+* GET: /recommendation 
 <br/>
     
