@@ -1,4 +1,3 @@
-const { recommendation } = require('../controllers/controller');
 const { getCustomerFromDB, 
         createCustomerInDB, 
         updateCustomerInDB, 
@@ -16,16 +15,25 @@ const getCustomers = async () => {
     }
 }
 
-const createCustomerService = async (id, customerName) => {
-    let newCustomerJSON = {
-        id: id,
+const createCustomerService = async (customerName) => {
+    let lastElement;
+
+    try {
+        let resFromFile = await getCustomers();
+        lastElement = resFromFile[resFromFile.length - 1];
+    } catch (e) {
+        console.log(e.message);
+    }
+
+    let newID = lastElement.id++;
+
+    let newCustomerObject = {
+        id: newID,
         name: customerName
     }
 
-    newCustomerJSON = JSON.stringify(newCustomerJSON);
-
     try {
-        return createCustomerInDB(newCustomerJSON);
+        return createCustomerInDB(newCustomerObject);
     } catch (e) {
         throw new Error(e.message);
     }

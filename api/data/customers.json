@@ -1,7 +1,7 @@
 [
     {
         "id": 1,
-        "name": "Jason Brown"
+        "name": "Updated Name"
     },
     {
         "id": 2,
@@ -18,9 +18,5 @@
     {
         "id": 5,
         "name": "Maria Miller"
-    },
-    {
-        "id": 6,
-        "name": "Anson Melakayil"
     }
 ]

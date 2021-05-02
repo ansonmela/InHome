@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm test",
+    "test": "mocha 'api/test' --exit",
     "start": "node start.js"
   },
   "repository": {
@@ -21,6 +21,7 @@
   "dependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
+    "chai-http": "^4.3.0",
     "express": "^4.17.1",
     "file-system": "^2.2.2"
   },
@@ -30,6 +31,8 @@
     "@babel/node": "^7.13.13",
     "@babel/plugin-transform-runtime": "^7.13.15",
     "@babel/preset-env": "^7.13.15",
-    "eslint": "^7.25.0"
+    "chai": "^4.3.4",
+    "eslint": "^7.25.0",
+    "mocha": "^8.3.2"
   }
 }

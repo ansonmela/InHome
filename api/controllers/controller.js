@@ -12,9 +12,9 @@ const getAllCustomers = async (req, res, next) => {
     
     try {
         resData = await getCustomers();
-        res.send(JSON.parse(resData));
+        res.send(resData);
     } catch (e) {
-        console.log(e.message);
+        console.log("controller", e.message);
     }
     
     return resData;
@@ -22,24 +22,12 @@ const getAllCustomers = async (req, res, next) => {
 
 
 const createCustomer = async(req, res, next) => {
-    let lastElement;
-
-    try {
-        let resFromFile = await getCustomers();
-        lastElement = JSON.parse(resFromFile)[resFromFile.length - 1];
-    } catch (e) {
-        console.log(e.message);
-    }
-
-    let newID = lastElement.id + 1;
-
     let newCustomerName = req.body.name;
-    console.log(newCustomerName);
 
     try {
-        await createCustomerService(newID, newCustomerName);
+        await createCustomerService(newCustomerName);
     } catch (e) {
-        console.log(e.message);
+        console.log("controller", e.message);
     }
 
     res.sendStatus(201);

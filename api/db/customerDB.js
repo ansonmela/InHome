@@ -1,4 +1,5 @@
 const { fs } = require("file-system");
+const helpers = require('../utils/utils');
 
 const customersFilePath = 'api/data/customers.json';
 const ordersFilePath = 'api/data/orders.json';
@@ -7,32 +8,16 @@ const itemsFilePath = 'api/data/items.json';
 
 
 const getCustomerFromDB = () => {
-    const dataFromFile = fs.readFileSync(customersFilePath, 'utf-8', (err, data) => {
-        if (err) {
-            console.log(err);
-        }
-
-        return data;
-    })
+    const dataFromFile = helpers.readFromFile(customersFilePath, 'utf-8');
 
     return dataFromFile;
 }
 
 const createCustomerInDB = (customerJSON) => {
-    customerJSON = JSON.parse(customerJSON);
+    let dataFromFile = helpers.readFromFile(customersFilePath, 'utf-8');
+    dataFromFile.push(customerJSON);
 
-    let dataFromFile = fs.readFileSync(customersFilePath, function(err, data) {
-        if (err) console.log(err);
-
-        let jsonFromFile = JSON.parse(data);
-        jsonFromFile.push(customerJSON);
-
-    });
-
-    let json = JSON.parse(dataFromFile);
-    json.push(customerJSON);
-
-    fs.writeFileSync(dataPath, JSON.stringify(json));
+    helpers.writeToFile(customersFilePath, dataFromFile);
 
     return true;
 }
@@ -40,13 +25,7 @@ const createCustomerInDB = (customerJSON) => {
 const updateCustomerInDB = (id, customerName) => {
     id = parseInt(id);
 
-    let dataFromFile = fs.readFileSync(customersFilePath, function(err, data) {
-        if (err) console.log(err);
-
-        return data;
-    })
-
-    dataFromFile = JSON.parse(dataFromFile);
+    let dataFromFile = helpers.readFromFile(customersFilePath, 'utf-8');
 
     for (const customer of dataFromFile) {
         if (customer.id === id) {
@@ -55,49 +34,32 @@ const updateCustomerInDB = (id, customerName) => {
         }
     }
 
-    fs.writeFileSync(dataPath, JSON.stringify(dataFromFile));
+    helpers.writeToFile(customersFilePath, dataFromFile);
 }
 
 const createCustomerOrderInDB = (customerID, itemID, quantity) => {
-    let ordersFromFile = fs.readFileSync(ordersFilePath, function(err, data) {
-        if (err) console.log(err);
-
-        return data;
-    });
-
-    ordersFromFile = JSON.parse(ordersFromFile);
+    let ordersFromFile = helpers.readFromFile(ordersFilePath, 'utf-8');
 
     let lastElement = ordersFromFile[ordersFromFile.length - 1];
-    let nextOrderID = lastElement.id + 1;
+    let nextOrderID = lastElement.id++;
 
     ordersFromFile.push({id: nextOrderID, user_id: customerID});
 
-    fs.writeFileSync(ordersFilePath, JSON.stringify(ordersFromFile));
+    helpers.writeToFile(ordersFilePath, ordersFromFile);
 
-
-    let orderLinesFromFile = fs.readFileSync(orderLinesFilePath, function(err, data) {
-        if (err) console.log(err);
-
-        return data;
-    });
-
-    orderLinesFromFile = JSON.parse(orderLinesFromFile);
+    let orderLinesFromFile = helpers.readFromFile(orderLinesFilePath, 'utf-8');
 
     orderLinesFromFile.push({order_id: nextOrderID, item_id: itemID, qty: quantity});
 
-    fs.writeFileSync(orderLinesFilePath, JSON.stringify(orderLinesFromFile));
+    helpers.writeToFile(orderLinesFilePath, orderLinesFromFile);
+
 }
 
 const customerOrderUpdateInDB = (orderID, orderQuantity, itemID) => {
     orderID = parseInt(orderID);
     itemID = parseInt(itemID);
 
-    let orderLinesFromFile = fs.readFileSync(orderLinesFilePath, function(err, data) {
-        if (err) console.log(err);
-        return data;
-    });
-
-    orderLinesFromFile = JSON.parse(orderLinesFromFile);
+    let orderLinesFromFile = helpers.readFromFile(orderLinesFilePath, 'utf-8');
 
     for (var i = 0; i < orderLinesFromFile.length; i++) {
         if (orderLinesFromFile[i].order_id === orderID && orderLinesFromFile[i].item_id === itemID) {
@@ -106,7 +68,8 @@ const customerOrderUpdateInDB = (orderID, orderQuantity, itemID) => {
         }
     }
 
-    fs.writeFileSync(orderLinesFilePath, JSON.stringify(orderLinesFromFile));
+    helpers.writeToFile(orderLinesFilePath, orderLinesFromFile);
+
 }
 
 const deleteCustomerOrderItemInDB = (orderID, itemID) => {
@@ -114,19 +77,7 @@ const deleteCustomerOrderItemInDB = (orderID, itemID) => {
     itemID = parseInt(itemID);
     let found = false;
 
-    let orderLinesFromFile = fs.readFileSync(orderLinesFilePath, function(err, data) {
-        if (err) console.log(err);
-        return data;
-    });
-
-    let ordersFromFile = fs.readFileSync(ordersFilePath, function(err, data) {
-        if (err) console.log(err);
-        return data;
-    });
-
-    ordersFromFile = JSON.parse(ordersFromFile);
-
-    orderLinesFromFile = JSON.parse(orderLinesFromFile);
+    let orderLinesFromFile = helpers.readFromFile(orderLinesFilePath, 'utf-8');
 
     for (var i = 0; i < orderLinesFromFile.length; i++) {
         if (orderLinesFromFile[i].order_id === orderID && orderLinesFromFile[i].item_id === itemID) {
@@ -137,7 +88,7 @@ const deleteCustomerOrderItemInDB = (orderID, itemID) => {
     }
 
     if (found) {
-        fs.writeFileSync(orderLinesFilePath, JSON.stringify(orderLinesFromFile));
+        helpers.writeToFile(orderLinesFilePath, orderLinesFromFile);
         return true;
     } else {
         return false;
@@ -145,19 +96,8 @@ const deleteCustomerOrderItemInDB = (orderID, itemID) => {
 }
 
 const recommendationFromDB = () => {
-        let orderLinesFromFile = fs.readFileSync(orderLinesFilePath, function(err, data) {
-            if (err) console.log(err);
-            return data;
-        });
-
-        let itemsFromFile = fs.readFileSync(itemsFilePath, function(err, data) {
-            if (err) console.log(err);
-            return data;
-        });
-
-        itemsFromFile = JSON.parse(itemsFromFile);
-
-        orderLinesFromFile = JSON.parse(orderLinesFromFile);
+        let orderLinesFromFile = helpers.readFromFile(orderLinesFilePath, 'utf-8');
+        let itemsFromFile = helpers.readFromFile(itemsFilePath, 'utf-8');
 
         return {orderLines: orderLinesFromFile, items: itemsFromFile};
 }

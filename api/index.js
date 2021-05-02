@@ -10,7 +10,7 @@ app.use(express.urlencoded({extended: true}));
 
 app.get('/customer/get', controller.getAllCustomers);
 app.post('/customer/create', controller.createCustomer);
-app.put('/customer/update/:id', controller.updateCustomer);
+app.put('/customer/update/:customer_id', controller.updateCustomer);
 app.post('/customer/order/create', controller.createCustomerOrder);
 app.put('/customer/order/update/item/:order_ID/:item_ID', controller.customerOrderUpdate);
 app.delete('/customer/order/delete/item/:order_ID/:item_ID', controller.deleteCustomerOrderItem);
@@ -23,4 +23,6 @@ const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
 });
+
+module.exports = app;
 
