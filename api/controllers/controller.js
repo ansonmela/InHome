@@ -14,7 +14,8 @@ const getAllCustomers = async (req, res, next) => {
         resData = await getCustomers();
         res.send(resData);
     } catch (e) {
-        console.log("controller", e.message);
+        res.sendStatus(500);
+        console.log("CONTROLLER ERROR: ", e.message);
     }
     
     return resData;
@@ -27,7 +28,8 @@ const createCustomer = async(req, res, next) => {
     try {
         await createCustomerService(newCustomerName);
     } catch (e) {
-        console.log("controller", e.message);
+        res.sendStatus(500);
+        console.log("CONTROLLER ERROR: ", e.message);
     }
 
     res.sendStatus(201);
@@ -41,7 +43,8 @@ const updateCustomer = async (req, res, next) => {
     try {
         await updateCustomerService(customerID, customerNameToUpdate);
     } catch (e) {
-        console.log(e.message);
+        res.sendStatus(500);
+        console.log("CONTROLLER ERROR: ", e.message);
     }
 
     res.sendStatus(204);
@@ -55,7 +58,8 @@ const createCustomerOrder = async (req, res, next) => {
     try {
         await createCustomerOrderService(customerID, itemID, quantity);
     } catch (e) {
-        console.log(e.message);
+        res.sendStatus(500);
+        console.log("CONTROLLER ERROR: ", e.message);
     }
 
     res.sendStatus(201);
@@ -72,7 +76,8 @@ const customerOrderUpdate = async (req, res, next) => {
         try {
             await customerOrderUpdateService(orderID, orderQuantity, itemID);
         } catch (e) {
-            console.log(e.message);
+            res.sendStatus(500);
+            console.log("CONTROLLER ERROR: ", e.message);
         }
         
         res.sendStatus(204);
@@ -88,7 +93,8 @@ const deleteCustomerOrderItem = async (req, res, next) => {
     try {
         response = await deleteCustomerOrderItemService(orderID, itemID);
     } catch (e) {
-        console.log("CONTROLLER", e.message);
+        res.sendStatus(500);
+        console.log("CONTROLLER ERROR: ", e.message);
     }
 
     if (response) {
@@ -105,7 +111,8 @@ const recommendation = async (req, res, next) => {
     try {
         response = await recommendationService();
     } catch (e) {
-        console.log("CONTROLLER", e.message);
+        res.sendStatus(500);
+        console.log("CONTROLLER ERROR: ", e.message);
     }
 
     res.send(response);

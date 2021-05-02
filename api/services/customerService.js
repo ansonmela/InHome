@@ -54,7 +54,7 @@ const createCustomerOrderService = async (customerID, itemID, quantity) => {
     try {
         return createCustomerOrderInDB(customerID, itemID, quantity);
     } catch (e) {
-        console.log(e.message);
+        throw new Error(e.message);
     }
 
 }
@@ -63,7 +63,7 @@ const customerOrderUpdateService = async (orderID, orderQuantity, itemID) => {
     try {
         return customerOrderUpdateInDB(orderID, orderQuantity, itemID);
     } catch (e) {
-        console.log(e.message);
+        throw new Error(e.message);
     }
 }
 
@@ -73,7 +73,7 @@ const deleteCustomerOrderItemService = async (orderID, itemID) => {
     try {
         response = await deleteCustomerOrderItemInDB(orderID, itemID);
     } catch (e) {
-        console.log("SERVICE", e.message);
+        throw new Error(e.message);
     }
     
     if (response) {
@@ -91,7 +91,7 @@ const recommendationService = async () => {
     try {
         dbData = await recommendationFromDB();
     } catch (e) {
-        console.log("SERVICE", e.message);
+        throw new Error(e.message);
     }
 
     const orderLines = dbData.orderLines;
