@@ -3,6 +3,7 @@ const { fs } = require("file-system");
 const customersFilePath = 'api/data/customers.json';
 const ordersFilePath = 'api/data/orders.json';
 const orderLinesFilePath = 'api/data/order_lines.json';
+const itemsFilePath = 'api/data/items.json';
 
 
 const getCustomerFromDB = () => {
@@ -108,6 +109,59 @@ const customerOrderUpdateInDB = (orderID, orderQuantity, itemID) => {
     fs.writeFileSync(orderLinesFilePath, JSON.stringify(orderLinesFromFile));
 }
 
+const deleteCustomerOrderItemInDB = (orderID, itemID) => {
+    orderID = parseInt(orderID);
+    itemID = parseInt(itemID);
+    let found = false;
+
+    let orderLinesFromFile = fs.readFileSync(orderLinesFilePath, function(err, data) {
+        if (err) console.log(err);
+        return data;
+    });
+
+    let ordersFromFile = fs.readFileSync(ordersFilePath, function(err, data) {
+        if (err) console.log(err);
+        return data;
+    });
+
+    ordersFromFile = JSON.parse(ordersFromFile);
+
+    orderLinesFromFile = JSON.parse(orderLinesFromFile);
+
+    for (var i = 0; i < orderLinesFromFile.length; i++) {
+        if (orderLinesFromFile[i].order_id === orderID && orderLinesFromFile[i].item_id === itemID) {
+            found = true;
+            orderLinesFromFile.splice(i, 1);
+            break;
+        }
+    }
+
+    if (found) {
+        fs.writeFileSync(orderLinesFilePath, JSON.stringify(orderLinesFromFile));
+        return true;
+    } else {
+        return false;
+    }
+}
+
+const recommendationFromDB = () => {
+        let orderLinesFromFile = fs.readFileSync(orderLinesFilePath, function(err, data) {
+            if (err) console.log(err);
+            return data;
+        });
+
+        let itemsFromFile = fs.readFileSync(itemsFilePath, function(err, data) {
+            if (err) console.log(err);
+            return data;
+        });
+
+        itemsFromFile = JSON.parse(itemsFromFile);
+
+        orderLinesFromFile = JSON.parse(orderLinesFromFile);
+
+        return {orderLines: orderLinesFromFile, items: itemsFromFile};
+}
+
 
 
 module.exports = {
@@ -115,5 +169,7 @@ module.exports = {
     createCustomerInDB,
     updateCustomerInDB,
     createCustomerOrderInDB,
-    customerOrderUpdateInDB
+    customerOrderUpdateInDB,
+    deleteCustomerOrderItemInDB,
+    recommendationFromDB
 }

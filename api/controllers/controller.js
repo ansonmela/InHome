@@ -2,7 +2,9 @@ const { getCustomers,
         createCustomerService, 
         updateCustomerService, 
         createCustomerOrderService, 
-        customerOrderUpdateService 
+        customerOrderUpdateService,
+        deleteCustomerOrderItemService,
+        recommendationService 
     } = require('../services/customerService.js');
 
 const getAllCustomers = async (req, res, next) => {
@@ -84,8 +86,41 @@ const customerOrderUpdate = async (req, res, next) => {
         } catch (e) {
             console.log(e.message);
         }
+        
         res.sendStatus(204);
     }
+}
+
+const deleteCustomerOrderItem = async (req, res, next) => {
+    const orderID = req.params.order_ID;
+    const itemID = req.params.item_ID;
+
+    let response;
+
+    try {
+        response = await deleteCustomerOrderItemService(orderID, itemID);
+    } catch (e) {
+        console.log("CONTROLLER", e.message);
+    }
+
+    if (response) {
+        res.sendStatus(200);
+    } else {
+        res.send({error: "item to be deleted was not found"});
+    }
+}
+
+
+const recommendation = async (req, res, next) => {
+    let response;
+
+    try {
+        response = await recommendationService();
+    } catch (e) {
+        console.log("CONTROLLER", e.message);
+    }
+
+    res.send(response);
 }
 
 
@@ -94,5 +129,7 @@ module.exports = {
     createCustomer,
     updateCustomer,
     createCustomerOrder,
-    customerOrderUpdate
+    customerOrderUpdate,
+    deleteCustomerOrderItem,
+    recommendation
 }
