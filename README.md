@@ -39,12 +39,18 @@
 - **GET: /recommendation**
 
 <br/>
+
 ### Pros and Cons of Recommendation Service
+
 <br/>
+
 #### Pros
+
     1. Shows the top 3 most ordered items by customers with a string that dynamically updated with each call to the service.
     2. The returned data could potentially be cached for up to a day for faster retrievals.
 <br/>
+
 #### Cons
+
     1. Pulls in whole data set for items and orders for each call, which could potentially be a bottleneck if multiple calls are sent at the same time. One way to mitigate this is with a cache, that would hold data for up to a day, which would essentially show the top 3 orders for the day or previous day.
     2. There could be more than 3 items with the same max number. But since we only want top 3, no criteria or logic to determine which item wins a tie. One potential solution to this would be a geographic or locale based recommendations, or a much complex algorithm that tailors top 3 based on customer interests.
