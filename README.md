@@ -2,7 +2,7 @@
 
 ### Getting Started
 
-1. Download this repo to your local machine.
+1. Download or clone this repo to your local machine.
 2. Change directory to the level with the package.json file.
 3. Run ```npm install``` to install all the necessary dependencies and get your node_modules into the project to have it ready for start up.
 4. Then run ```npm test``` to see the integration tests in action, the tests make a call to each endpoint to verify the proper request/response flow is achieved for this API.
@@ -37,3 +37,14 @@
     ```
 - **DELETE: /customer/order/delete/item/:order_id/:item_id** 
 - **GET: /recommendation**
+
+<br/>
+### Pros and Cons of Recommendation Service
+<br/>
+#### Pros
+    1. Shows the top 3 most ordered items by customers with a string that dynamically updated with each call to the service.
+    2. The returned data could potentially be cached for up to a day for faster retrievals.
+<br/>
+#### Cons
+    1. Pulls in whole data set for items and orders for each call, which could potentially be a bottleneck if multiple calls are sent at the same time. One way to mitigate this is with a cache, that would hold data for up to a day, which would essentially show the top 3 orders for the day or previous day.
+    2. There could be more than 3 items with the same max number. But since we only want top 3, no criteria or logic to determine which item wins a tie. One potential solution to this would be a geographic or locale based recommendations, or a much complex algorithm that tailors top 3 based on customer interests.
